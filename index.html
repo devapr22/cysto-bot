@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CYSTOBOT</title>
+    <style>
+        /* General Styles */
+        body { 
+            font-family: 'Times New Roman', Times, serif; 
+            text-align: center;
+            align-items: center;
+            background-image: url('https://rb.gy/gp18dy'); /* Update the path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* Heading Animation */
+        h2 {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 65px;
+            color: #333;
+            margin-bottom: 20px;
+            animation: fadeInZoom 1.5s ease-in-out;
+        }
+
+        @keyframes fadeInZoom {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Chatbox Styles */
+        #chatbox {
+            width: 70%; 
+            margin: auto; 
+            padding: 10px; 
+            border: 1px solid #000000; 
+            background: #dce2e4;
+            font-size: 48px; 
+            border-radius: 20px;
+            margin-bottom: 20px;
+            height: 55vh;
+            text-align: center;
+            color: black; 
+            position: relative;
+            display: none; /* Hide chatbox initially */
+        }
+
+        /* Question Text Animation */
+        #question {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        .fade-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* Animated Buttons */
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 35px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: bold;
+            outline: none;
+        }
+
+        /* Yes Button */
+        .yes-button {
+            background-color: #F4C2C2;
+            color: rgb(0, 0, 0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* No Button */
+        .no-button {
+            background-color: #c8a2c8;
+            color: rgb(0, 0, 0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Glow Effect on Hover */
+        .yes-button:hover, .no-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Click Animation (Bounce Effect) */
+        .yes-button:active, .no-button:active {
+            transform: scale(0.9);
+            animation: bounce 0.3s ease;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0.9); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Fade-out effect for question change */
+        .fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        /* Change font size for PCOS description */
+        #pcos-description p {
+            font-size: 25px; /* Change to the desired font size */
+        }
+
+        /* Meal suggestions section */
+        #meal-suggestions, #exercise-suggestions {
+            font-size: 24px;
+            display: none;
+        }
+
+        /* Remedy section */
+        #remedy {
+            font-size: 25px;
+            color: #0B1957;
+            display: none;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>CystoBot</h2>
+    <!-- PCOS Description Section -->
+    <div id="pcos-description">
+        <p><strong>PCOS/PCOD?</strong></p>
+        <p>Polycystic Ovary Syndrome (PCOS) and Polycystic Ovary Disease (PCOD) are hormonal disorders that affect the ovaries and reproductive health in women.</p>
+        <p>PCOS is a metabolic and endocrine disorder characterized by hormonal imbalances that lead to irregular periods, ovarian cysts, and symptoms like weight gain, acne, excessive hair growth, and fertility issues. It is often associated with insulin resistance, increasing the risk of type 2 diabetes and other metabolic conditions. PCOD is a condition where the ovaries produce immature or partially developed eggs, which can lead to cyst formation. Unlike PCOS, PCOD is primarily an ovarian dysfunction and may not always involve severe hormonal imbalances. Women with PCOD can still ovulate regularly and may have fewer complications compared to those with PCOS.</p>
+        <p>PCOS and PCOD often go undiagnosed because their symptoms can vary widely and may be mistaken for other conditions.<p>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <div id="chatbox">
+        <p id="question">Loading...</p>
+        <div class="button-container">
+            <button class="yes-button" onclick="answerQuestion('Yes')">Yes</button>
+            <button class="no-button" onclick="answerQuestion('No')">No</button>
+        </div>
+        <div id="remedy"></div> <!-- Remedy will appear here -->
+    </div>
+
+    <!-- Meal Suggestions Section -->
+    <div id="meal-suggestions">
+        <p>Here are some meal suggestions suitable for PCOS:</p>
+        <ul>
+            <li>Oats with chia seeds and almond butter</li>
+            <li>Grilled chicken with quinoa and roasted vegetables</li>
+            <li>Salmon salad with spinach, avocado, and olive oil dressing</li>
+            <li>Chickpea and vegetable stew</li>
+            <li>Greek yogurt with berries and flaxseeds</li>
+            <li>Cauliflower rice stir-fry with tofu and vegetables</li>
+        </ul>
+        <p>These meals help with managing insulin resistance and promoting overall well-being.</p>
+        <button onclick="showExerciseSuggestions()">Next: Exercise Suggestions</button>
+    </div>
+
+    <!-- Exercise Suggestions Section -->
+    <div id="exercise-suggestions">
+        <p>Here are some exercises suitable for managing PCOS:</p>
+        <ul>
+            <li>Walking or brisk walking for 30 minutes</li>
+            <li>Yoga or Pilates for stress relief and flexibility</li>
+            <li>Strength training or weightlifting for muscle mass</li>
+            <li>High-intensity interval training (HIIT) for improving metabolism</li>
+            <li>Swimming or cycling for overall fitness</li>
+            <li>Dance workouts to improve mood and energy levels</li>
+        </ul>
+        <p>Regular exercise can help manage symptoms of PCOS, regulate menstrual cycles, and reduce stress.</p>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let answers = [];
+        let yesCount = 0;
+        let noCount = 0;
+
+        const questions = [
+            "1. Are you experiencing an absence of menstruation?",  
+            "2. Is your menstrual cycle irregular?",  
+            "3. Are you experiencing heavy menstrual bleeding?",  
+            "4. Have you noticed excessive hair growth on your body or face?",
+            "5. Are you experiencing persistent acne?", 
+            "6. Have you noticed hair loss or thinning?",
+            "7. Have you experienced unexplained weight gain?", 
+            "8. Have you observed darkening of your skin in certain areas (neck, groin, under the breast)?",
+            "9. Do you have a family history of polycystic ovary syndrome (PCOS) or polycystic ovary disease (PCOD)?",
+            "10. Have you noticed the development of skin tags?",
+            "11. Have you been experiencing difficulty conceiving or reduced fertility?",
+            "12. Are you experiencing high levels of stress or anxiety?"
+        ];
+
+        const remedies = [
+            "For absent menstruation: Consider lifestyle changes, like maintaining a healthy weight and managing stress. Consult with a doctor for hormonal regulation treatments.",
+            "For irregular periods: A balanced diet, exercise, and medication can help regulate menstrual cycles.",
+            "For heavy bleeding: Hormonal birth control methods or an IUD may help control heavy bleeding.",
+            "For excessive hair growth: Laser hair removal or prescription medications can help manage unwanted hair.",
+            "For acne: A good skincare routine, diet changes, and hormonal therapy can help manage acne.",
+            "For hair loss/thinning: Use of minoxidil or other treatments may help restore hair growth.",
+            "For weight gain: Focus on a balanced diet, exercise, and possibly medication prescribed by a doctor.",
+            "For skin darkening: Managing insulin resistance with diet and exercise can improve skin appearance.",
+            "If you have a family history: Regular screenings can help detect early symptoms.",
+            "For skin tags: Removing skin tags through minor procedures can help.",
+            "For fertility issues: Consult a fertility specialist for options like ovulation induction.",
+            "For high stress: Yoga, meditation, and therapy can help reduce stress levels."
+        ];
+
+        function startQuiz() {
+            document.getElementById("pcos-description").style.display = "none"; // Hide the PCOS description
+            document.getElementById("chatbox").style.display = "block"; // Show the chatbox with questions
+            displayQuestion(); // Display the first question
+        }
+
+        function displayQuestion() {
+            let questionElement = document.getElementById("question");
+            let remedyElement = document.getElementById("remedy");
+            
+            // Remove old animation
+            questionElement.classList.remove("fade-in");
+            // Add fade-out effect before changing the text
+            questionElement.classList.add("fade-out");
+
+            setTimeout(() => {
+                if (currentIndex < questions.length) {
+                    questionElement.innerText = questions[currentIndex];
+                    remedyElement.style.display = "none"; // Hide remedy initially
+                } else {
+                    showFinalMessage();
+                }
+
+                // Remove fade-out and add fade-in
+                questionElement.classList.remove("fade-out");
+                questionElement.classList.add("fade-in");
+            }, 2000); // Wait before updating the question
+        }
+
+        function answerQuestion(answer) {
+            answers.push(answer);
+            if (answer === "Yes") {
+                yesCount++;
+                // Show the corresponding remedy
+                let remedyElement = document.getElementById("remedy");
+                remedyElement.innerText = remedies[currentIndex];
+                remedyElement.style.display = "block";
+            } else {
+                noCount++;
+            }
+            currentIndex++;
+            displayQuestion();
+        }
+
+        function showFinalMessage() {
+            let yesCountMessage = "Yes count: " + yesCount;
+            let noCountMessage = "No count: " + noCount;
+            let message = (yesCount >= 6) 
+                ? "If you’re experiencing these symptoms regularly, seeking medical advice can help you get the right support and treatment." 
+                : "Your symptoms do not strongly indicate PCOS/PCOD, but if you have concerns, a doctor’s consultation is recommended.";
+            
+            document.getElementById("question").innerText = `${message}\n${yesCountMessage}\n${noCountMessage}`;
+            document.querySelector(".button-container").style.display = "none";
+
+            // Show meal suggestions after 7 seconds
+            setTimeout(askMealAndExerciseSuggestions, 7000); // Delay meal suggestions by 7 seconds
+        }
+
+        // Ask if they need meal and exercise suggestions
+        function askMealAndExerciseSuggestions() {
+            setTimeout(() => {
+                let questionElement = document.getElementById("question");
+                questionElement.innerText = "Would you like meal suggestions suitable for PCOS patients?";
+                document.querySelector(".button-container").style.display = "block"; // Show the yes/no buttons
+                document.querySelector(".yes-button").onclick = function() {
+                    showMealSuggestions();
+                };
+                document.querySelector(".no-button").onclick = function() {
+                    endChat();
+                };
+            }, 1000);
+        }
+
+        // Show meal suggestions
+        function showMealSuggestions() {
+            document.getElementById("meal-suggestions").style.display = "block";
+            document.getElementById("chatbox").style.display = "none";
+            document.getElementById("exercise-suggestions").style.display = "none"; // Hide exercise suggestions
+        }
+
+        // Show exercise suggestions after meals
+        function showExerciseSuggestions() {
+            document.getElementById("exercise-suggestions").style.display = "block";
+            document.getElementById("meal-suggestions").style.display = "none"; // Hide meal suggestions
+        }
+
+        // End chat if no meal and exercise suggestions
+        function endChat() {
+            document.getElementById("chatbox").style.display = "none";
+            document.getElementById("meal-suggestions").style.display = "none";
+            document.getElementById("exercise-suggestions").style.display = "none";
+        }
+
+        // Load first question with fade-in effect
+        window.onload = () => {
+            let questionElement = document.getElementById("question");
+            questionElement.classList.add("fade-in");
+            displayQuestion();
+        };
+    </script>
+
+</body>
+</html>
